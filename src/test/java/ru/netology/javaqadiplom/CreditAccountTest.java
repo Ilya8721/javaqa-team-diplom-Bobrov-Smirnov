@@ -8,28 +8,42 @@ public class CreditAccountTest {
     @Test
     public void shouldAddToPositiveBalance() {
         CreditAccount account = new CreditAccount(
-                0,
+                1_000,
                 5_000,
                 15
         );
 
         account.add(3_000);
 
-        Assertions.assertEquals(3_000, account.getBalance());
+        Assertions.assertEquals(4_000, account.getBalance());
     }
 
 
     @Test
     public void shouldNotAddToPositiveBalance() {
         CreditAccount account = new CreditAccount(
-                0,
+                1_000,
                 5_000,
                 15
         );
 
         account.add(-3_000);
 
-        Assertions.assertEquals(0, account.getBalance());
+        Assertions.assertEquals(1_000, account.getBalance());
+    }
+
+
+    @Test
+    public void balancShouldNotChange() {
+        CreditAccount account = new CreditAccount(
+                1_000,
+                5_000,
+                15
+        );
+
+        account.add(0);
+
+        Assertions.assertEquals(1_000, account.getBalance());
     }
 
 
@@ -46,7 +60,7 @@ public class CreditAccountTest {
     public void negativeCreditLimit() {
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new CreditAccount(0,-5_000,15);
+            new CreditAccount(1_000,-5_000,15);
         });
     }
 
@@ -55,19 +69,32 @@ public class CreditAccountTest {
     public void negativeRate() {
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new CreditAccount(0,5_000,-15);
+            new CreditAccount(1_000,5_000,-15);
         });
     }
 
 
     @Test
-    public void negativePayment() {
+    public void negativePayment1() {
         CreditAccount account = new CreditAccount(
                 3000,
                 5_000,
                 15
         );
         account.pay(-2_000);
+
+        Assertions.assertEquals(3000, account.getBalance());
+    }
+
+
+    @Test
+    public void negativePayment0() {
+        CreditAccount account = new CreditAccount(
+                3000,
+                5_000,
+                15
+        );
+        account.pay(0);
 
         Assertions.assertEquals(3000, account.getBalance());
     }
@@ -87,6 +114,19 @@ public class CreditAccountTest {
 
 
     @Test
+    public void balanceEqualsPaymentAmount() {
+        CreditAccount account = new CreditAccount(
+                3000,
+                5_000,
+                15
+        );
+        account.pay(3_000);
+
+        Assertions.assertEquals(0, account.getBalance());
+    }
+
+
+    @Test
     public void balanceBelowPaymentAmount() {
         CreditAccount account = new CreditAccount(
                 3000,
@@ -96,6 +136,19 @@ public class CreditAccountTest {
         account.pay(5_000);
 
         Assertions.assertEquals(-2000, account.getBalance());
+    }
+
+
+    @Test
+    public void balancePlusCreditLimitEqualsPaymentAmount() {
+        CreditAccount account = new CreditAccount(
+                3000,
+                5_000,
+                15
+        );
+        account.pay(8_000);
+
+        Assertions.assertEquals(3000, account.getBalance());
     }
 
 
@@ -127,12 +180,28 @@ public class CreditAccountTest {
 
 
     @Test
-    public void annualLoanDebt0() {
+    public void annualLoanDebt1() {
         CreditAccount account = new CreditAccount(
                 3000,
                 5_000,
                 15
         );
+
+        account.pay(3_000);
+
+        Assertions.assertEquals(0, account.yearChange());
+    }
+
+
+    @Test
+    public void annualLoanDebt2() {
+        CreditAccount account = new CreditAccount(
+                3000,
+                5_000,
+                15
+        );
+
+        account.pay(1_000);
 
         Assertions.assertEquals(0, account.yearChange());
     }
