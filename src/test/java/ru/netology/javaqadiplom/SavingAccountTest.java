@@ -194,7 +194,6 @@ public class SavingAccountTest {
     }
 
 
-
 //                        <<<ADD>>>
 
 
@@ -276,7 +275,8 @@ public class SavingAccountTest {
         );
 
         boolean expected = true;
-        boolean actual = account.add(8_000);;
+        boolean actual = account.add(8_000);
+        ;
 
         Assertions.assertEquals(expected, actual);
     }
@@ -291,7 +291,8 @@ public class SavingAccountTest {
         );
 
         boolean expected = false;
-        boolean actual = account.add(-8_000);;
+        boolean actual = account.add(-8_000);
+        ;
 
         Assertions.assertEquals(expected, actual);
     }
@@ -306,7 +307,8 @@ public class SavingAccountTest {
         );
 
         boolean expected = false;
-        boolean actual = account.add(0);;
+        boolean actual = account.add(0);
+        ;
 
         Assertions.assertEquals(expected, actual);
     }
@@ -321,7 +323,8 @@ public class SavingAccountTest {
         );
 
         boolean expected = false;
-        boolean actual = account.add(30_000);;
+        boolean actual = account.add(30_000);
+        ;
 
         Assertions.assertEquals(expected, actual);
     }
@@ -357,8 +360,6 @@ public class SavingAccountTest {
 
         Assertions.assertEquals(expected, actual);
     }
-
-
 
 
     //                                       <<<SAVING ACCOUNT>>>
@@ -440,6 +441,87 @@ public class SavingAccountTest {
         });
     }
 
+    //Bank
+    @Test
+    public void transferToCreditAccount1() {
+        CreditAccount accountCredit = new CreditAccount(
+                3000,
+                5_000,
+                15
+        );
+        SavingAccount accountSaving = new SavingAccount(
+                5_000,
+                500,
+                20_000,
+                10
+        );
+        Bank bank = new Bank();
+        bank.transfer(accountSaving, accountCredit, 1_000);
+
+        Assertions.assertEquals(4_000, accountCredit.getBalance());
+        Assertions.assertEquals(4_000, accountSaving.getBalance());
+    }
 
 
+    @Test
+    public void transferToCreditAccount2() {
+        CreditAccount accountCredit = new CreditAccount(
+                3000,
+                5_000,
+                15
+        );
+        SavingAccount accountSaving = new SavingAccount(
+                5_000,
+                500,
+                20_000,
+                10
+        );
+        Bank bank = new Bank();
+        bank.transfer(accountSaving, accountCredit, 4_500);
+
+        Assertions.assertEquals(7_500, accountCredit.getBalance());
+        Assertions.assertEquals(500, accountSaving.getBalance());
+    }
+
+
+    @Test
+    public void NegativeTransferToCreditAccount() {
+        CreditAccount accountCredit = new CreditAccount(
+                3000,
+                5_000,
+                15
+        );
+        SavingAccount accountSaving = new SavingAccount(
+                5_000,
+                500,
+                20_000,
+                10
+        );
+        Bank bank = new Bank();
+        bank.transfer(accountSaving, accountCredit, -1_000);
+
+        Assertions.assertEquals(3_000, accountCredit.getBalance());
+        Assertions.assertEquals(5_000, accountSaving.getBalance());
+    }
+
+
+    @Test
+    public void transferToCreditAccountShouldNotWork() {
+        CreditAccount accountCredit = new CreditAccount(
+                3000,
+                5_000,
+                15
+        );
+        SavingAccount accountSaving = new SavingAccount(
+                5_000,
+                500,
+                20_000,
+                10
+        );
+        Bank bank = new Bank();
+        bank.transfer(accountSaving, accountCredit, 6_000);
+
+        Assertions.assertEquals(3_000, accountCredit.getBalance());
+        Assertions.assertEquals(5_000, accountSaving.getBalance());
+    }
 }
