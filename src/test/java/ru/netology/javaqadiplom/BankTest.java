@@ -42,10 +42,10 @@ public class BankTest {
                 10
         );
         Bank bank = new Bank();
-        bank.transfer(accountCredit, accountSaving, 7_000);
+        bank.transfer(accountCredit, accountSaving, 8_000);
 
-        Assertions.assertEquals(-4_000, accountCredit.getBalance());
-        Assertions.assertEquals(12_000, accountSaving.getBalance());
+        Assertions.assertEquals(-5_000, accountCredit.getBalance());
+        Assertions.assertEquals(13_000, accountSaving.getBalance());
     }
 
 
